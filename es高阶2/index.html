@@ -1,0 +1,38 @@
+<!--
+ * @Description: 
+ * @Author: jidongyu
+ * @Date: 2021-05-11 21:22:50
+ * @LastEditTime: 2021-05-11 22:07:30
+ * @LastEditors: jidongyu
+ * @Reference: 
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script> -->
+    <script src="./mvvm.js"></script>
+</head>
+<body>
+    <div id="app">
+        {{message}}
+        <div v-html="htmlData"></div>
+        <div>
+            <input v-model="inputData">{{inputData}}
+        </div>
+    </div>
+    <script>
+        let vm = new KVue({
+            el: "#app",
+            data: {
+                message: "测试",
+                htmlData: "就是测试",
+                inputData: "就是测试",
+            }
+        })
+    </script>
+</body>
+</html>
