@@ -1,8 +1,8 @@
 /*
  * @Description: 
  * @Author: jidongyu
- * @Date: 2021-05-11 21:35:20
- * @LastEditTime: 2021-05-13 22:59:18
+ * @Date: 2021-05-13 23:20:47
+ * @LastEditTime: 2021-05-13 23:24:59
  * @LastEditors: jidongyu
  * @Reference: 
  */
@@ -14,30 +14,43 @@ class KVue extends EventTarget {
         this.observer(this.$options.data);
     }
     observer(data) {
-        let keys = Object.keys(data);
-        keys.forEach(key => this.defineReact(data, key, data[key]))
-    }
-    defineReact(data, key, value) {
         let _this = this;
-        Object.defineProperty(data, key, {
-            configurable: true,
-            enumerable: true,
-            get() {
-                console.log("get 拦截");
-                return value
+        this.$options.data = new Proxy( data, {
+            get(target,key){
+                return target[key];
             },
-            set(newValue) {
-                console.log("这里是新值，", newValue);
-                
+            set(target,key,value){
                 // 设置新数据拦截时，创建数据的相关事件，并进行触发，事件的监听绑定是在元素编译处理过程中实现的
                 let ev = new CustomEvent(key, {
-                    detail: newValue
+                    detail: value
                 });
                 _this.dispatchEvent(ev);
-                value = newValue;
+                target[key] = value;
+                return true;
             }
-        })
+        } )
     }
+    // defineReact(data, key, value) {
+    //     let _this = this;
+    //     Object.defineProperty(data, key, {
+    //         configurable: true,
+    //         enumerable: true,
+    //         get() {
+    //             console.log("get 拦截");
+    //             return value
+    //         },
+    //         set(newValue) {
+    //             console.log("这里是新值，", newValue);
+                
+    //             // 设置新数据拦截时，创建数据的相关事件，并进行触发，事件的监听绑定是在元素编译处理过程中实现的
+    //             let ev = new CustomEvent(key, {
+    //                 detail: newValue
+    //             });
+    //             _this.dispatchEvent(ev);
+    //             value = newValue;
+    //         }
+    //     })
+    // }
     compile() {
         let el = document.querySelector(this.$options.el);
         this.compileNode(el);
